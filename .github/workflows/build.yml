@@ -26,11 +26,27 @@ jobs:
 
       - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
-        run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: install
+          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.FEATURES }} --target ${{ env.TARGET }}
 
       - name: Build binary
         if: ${{ !env.BIN_FEATURES }}
-        run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: install
+          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --target ${{ env.TARGET }}
+
+      # - name: Build binary with features
+      #   if: ${{ env.BIN_FEATURES }}
+      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+
+      # - name: Build binary
+      #   if: ${{ !env.BIN_FEATURES }}
+      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
 
       - name: Check binary
         run: ~/.cargo/bin/$BIN_NAME --help
@@ -57,15 +73,30 @@ jobs:
             override: true
             toolchain: 1.56
             profile: minimal
-            target: ${{ env.BIN_TARGET }}
 
       - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
-        run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: install
+          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.FEATURES }} --target ${{ env.TARGET }}
 
       - name: Build binary
         if: ${{ !env.BIN_FEATURES }}
-        run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: install
+          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --target ${{ env.TARGET }}
+
+      # - name: Build binary with features
+      #   if: ${{ env.BIN_FEATURES }}
+      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+
+      # - name: Build binary
+      #   if: ${{ !env.BIN_FEATURES }}
+      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
 
       - name: Check binary
         run: ~/.cargo/bin/$BIN_NAME --help
