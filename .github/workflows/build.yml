@@ -40,11 +40,6 @@ jobs:
           command: build
           args: --package ${{ env.BIN_NAME }} --features vendored-openssl --target ${{ env.BIN_TARGET }} --release
 
-
-      - run: ls target/
-      - run: ls target/$BIN_TARGET
-      - run: ls target/$BIN_TARGET/release
-
       - name: Check binary
         run: file target/$BIN_TARGET/release/$BIN_NAME
 
@@ -52,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
-          path: target/$BIN_TARGET/release/$BIN_NAME
+          path: target/${{ env.BIN_TARGET }}/release/${{ env.BIN_NAME }}
 
   build-diesel-cli-aarch64:
     name: Build diesel_cli
@@ -95,4 +90,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
-          path: target/$BIN_TARGET/release/$BIN_NAME
+          path: target/${{ env.BIN_TARGET }}/release/${{ env.BIN_NAME }}
