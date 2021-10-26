@@ -4,15 +4,18 @@ on:
 env:
   CARGO_INCREMENTAL: 0
   CARGO_HOME: $HOME/.cargo
+  BIN_VERSION: "v0.15.2"
+  BIN_NAME: "cargo-audit"
+  BIN_TARGET: "aarch64-unknown-linux-musl"
 jobs:
-  build-cargo-watch:
-    name: Build cargo-watch
+  build-cargo-audit:
+    name: Build cargo-audit
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
       - name: Cache cargo directory
-      - uses: actions/cache@v2
+        uses: actions/cache@v2
         with:
           path: |
             $CARGO_HOME/registry/index/
@@ -25,23 +28,26 @@ jobs:
         with:
             toolchain: 1.56
             override: true
-            target: aarch64-unknown-linux
+            target: ${{ env.BIN_TARGET }}
 
       - name: Build binary
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: install
-          args: --version v8.1.1 --target aarch64-unknown-linux
+          args: --version ${{ env.BIN_VERSION }} --target ${{ env.BIN_TARGET }}
 
       - name: Check binary
-        run: $CARGO_HOME/bin/cargo-watch --help
+        run: $CARGO_HOME/bin/$BIN_NAME --help
+
+      - name: Add full binary name to environment
+        run: echo BIN_FULL_NAME=$BIN_NAME-$BIN_VERSION-$BIN_TARGET >> $GITHUB_ENV
 
       - name: Rename binary
-        run: mv $CARGO_HOME/bin/cargo-watch cargo-watch-v8.1.1-aarch64-unknown-linux
+        run: mv $CARGO_HOME/bin/$BIN_NAME $BIN_FULL_NAME
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: cargo-watch-v8.1.1-aarch64-unknown-linux
-          path: cargo-watch-v8.1.1-aarch64-unknown-linux
+          name: ${{ env.BIN_FULL_NAME }}
+          path: ${{ env.BIN_FULL_NAME }}
