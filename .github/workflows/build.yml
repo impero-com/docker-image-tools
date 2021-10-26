@@ -1,0 +1,47 @@
+name: Build tools
+on:
+  workflow_dispatch:
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_HOME: $HOME/.cargo
+jobs:
+  build-cargo-watch:
+    name: Build cargo-watch
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache cargo directory
+      - uses: actions/cache@v2
+        with:
+          path: |
+            $CARGO_HOME/registry/index/
+            $CARGO_HOME/registry/cache/
+            $CARGO_HOME/git/db/
+          key: cache-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: 1.56
+            override: true
+            target: aarch64-unknown-linux
+
+      - name: Build binary
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: install
+          args: --version v8.1.1 --target aarch64-unknown-linux
+
+      - name: Check binary
+        run: $CARGO_HOME/bin/cargo-watch --help
+
+      - name: Rename binary
+        run: mv $CARGO_HOME/bin/cargo-watch cargo-watch-v8.1.1-aarch64-unknown-linux
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: cargo-watch-v8.1.1-aarch64-unknown-linux
+          path: cargo-watch-v8.1.1-aarch64-unknown-linux
