@@ -38,7 +38,7 @@ jobs:
         with:
           use-cross: true
           command: build
-          args: --package ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }} --release
+          args: --package ${{ env.BIN_NAME }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }} --release
 
       # - name: Build binary with features
       #   if: ${{ env.BIN_FEATURES }}
