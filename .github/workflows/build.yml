@@ -19,8 +19,10 @@ jobs:
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
-            toolchain: 1.56
             override: true
+            toolchain: 1.56
+            profile: minimal
+            target: x86_64-unknown-linux-musl
 
       - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
@@ -52,8 +54,10 @@ jobs:
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
-            toolchain: 1.56
             override: true
+            toolchain: 1.56
+            profile: minimal
+            target: x86_64-unknown-linux-musl
 
       - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
