@@ -16,10 +16,10 @@ jobs:
       BIN_FEATURES: "vendored-openssl"
     steps:
       - name: Checkout internal repository
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Checkout external repository
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         with:
           repository: ${{ env.BIN_REPOSITORY }}
           ref: cargo-audit/v${{ env.BIN_VERSION }}
