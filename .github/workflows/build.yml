@@ -4,14 +4,15 @@ on:
   push:
 env:
   CARGO_INCREMENTAL: 0
-  BIN_VERSION: "0.15.2"
-  BIN_NAME: "cargo-audit"
-  BIN_TARGET: "aarch64-unknown-linux-musl"
-  BIN_FEATURES: "vendored-openssl"
 jobs:
-  build-cargo-audit:
+  build-cargo-audit-aarch64:
     name: Build cargo-audit
     runs-on: ubuntu-20.04
+    env:
+      BIN_VERSION: "0.15.2"
+      BIN_NAME: "cargo-audit"
+      BIN_TARGET: "aarch64-unknown-linux-musl"
+      BIN_FEATURES: "vendored-openssl"
     steps:
       - uses: actions/checkout@v2
 
@@ -26,7 +27,12 @@ jobs:
         run: ./tools/fetch-cross.sh
 
       - name: Build binary
+        if: ${{ env.BIN_FEATURES }} != ""
         run: ./cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+
+      - name: Build binary
+        if: ${{ env.BIN_FEATURES }} == ""
+        run: ./cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
 
       - name: Check binary
         run: ~/.cargo/bin/$BIN_NAME --help
@@ -34,5 +40,42 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.BIN_TARGET }}
+          name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
+          path: ~/.cargo/bin/${{ env.BIN_NAME }}
+
+  build-cargo-watch-aarch64:
+    name: Build cargo-watch
+    runs-on: ubuntu-20.04
+    env:
+      BIN_VERSION: "0.15.2"
+      BIN_NAME: "cargo-watch"
+      BIN_TARGET: "aarch64-unknown-linux-musl"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: 1.56
+            override: true
+            target: ${{ env.BIN_TARGET }}
+
+      - name: Fetch cross
+        run: ./tools/fetch-cross.sh
+
+      - name: Build binary
+        if: ${{ env.BIN_FEATURES }} != ""
+        run: ./cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+
+      - name: Build binary
+        if: ${{ env.BIN_FEATURES }} == ""
+        run: ./cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
+
+      - name: Check binary
+        run: ~/.cargo/bin/$BIN_NAME --help
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
           path: ~/.cargo/bin/${{ env.BIN_NAME }}
