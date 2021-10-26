@@ -6,7 +6,7 @@ env:
   CARGO_INCREMENTAL: 0
   BIN_VERSION: "0.15.2"
   BIN_NAME: "cargo-audit"
-  BIN_TARGET: "aarch64-unknown-linux-musl"
+  BIN_TARGET: "aarch64-unknown-linux-gnu"
   BIN_FEATURES: "vendored-openssl"
 jobs:
   build-cargo-audit:
