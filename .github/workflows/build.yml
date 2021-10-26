@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 env:
   CARGO_INCREMENTAL: 0
-  CARGO_HOME: $HOME/.cargo
+  CARGO_HOME: ~/.cargo
   BIN_VERSION: "v0.15.2"
   BIN_NAME: "cargo-audit"
   BIN_TARGET: "aarch64-unknown-linux-musl"
