@@ -40,6 +40,11 @@ jobs:
           command: build
           args: --package ${{ env.BIN_NAME }} --features vendored-openssl --target ${{ env.BIN_TARGET }} --release
 
+
+      - run: ls target/
+      - run: ls target/$BIN_TARGET
+      - run: ls target/$BIN_TARGET7release
+
       - name: Check binary
         run: file target/$BIN_TARGET/release/$BIN_NAME
 
