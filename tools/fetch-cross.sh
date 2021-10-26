@@ -12,3 +12,4 @@ URL=https://github.com/$REPO/$NAME/releases/download/$VERSION/$NAME-$VERSION-$TA
 
 curl --location $URL | tar xz
 chmod +x $NAME
+mv $NAME tools/bin/x86_64/
