@@ -1,6 +1,7 @@
 name: Build tools
 on:
   workflow_dispatch:
+  push:
 env:
   CARGO_INCREMENTAL: 0
   BIN_VERSION: "v0.15.2"
