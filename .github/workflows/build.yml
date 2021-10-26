@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       BIN_VERSION: "0.15.2"
-      BIN_TAG: "argo-audit/v0.15.2"
+      BIN_TAG: "cargo-audit/v0.15.2"
       BIN_NAME: "cargo-audit"
       BIN_REPOSITORY: "rustsec/rustsec"
       BIN_TARGET: "aarch64-unknown-linux-musl"
