@@ -73,6 +73,7 @@ jobs:
             override: true
             toolchain: 1.56
             profile: minimal
+            target: ${{ env.BIN_TARGET }}
 
       - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
