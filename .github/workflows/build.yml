@@ -43,7 +43,7 @@ jobs:
 
       - run: ls target/
       - run: ls target/$BIN_TARGET
-      - run: ls target/$BIN_TARGET7release
+      - run: ls target/$BIN_TARGET/release
 
       - name: Check binary
         run: file target/$BIN_TARGET/release/$BIN_NAME
