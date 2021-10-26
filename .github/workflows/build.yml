@@ -6,7 +6,7 @@ env:
   CARGO_INCREMENTAL: 0
   BIN_VERSION: "0.15.2"
   BIN_NAME: "cargo-audit"
-  BIN_TARGET: "aarch64-unknown-linux-gnu"
+  BIN_TARGET: "aarch64-unknown-linux-musl"
   BIN_FEATURES: "vendored-openssl"
 jobs:
   build-cargo-audit:
@@ -22,24 +22,17 @@ jobs:
             override: true
             target: ${{ env.BIN_TARGET }}
 
+      - name: Fetch cross
+        run: ./tools/fetch-cross.sh
+
       - name: Build binary
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: install
-          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --target ${{ env.BIN_TARGET }} --features ${{ env.BIN_FEATURES }}
+        run: cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
 
       - name: Check binary
         run: ~/.cargo/bin/$BIN_NAME --help
 
-      - name: Add full binary name to environment
-        run: echo BIN_FULL_NAME=$BIN_NAME-$BIN_VERSION-$BIN_TARGET >> $GITHUB_ENV
-
-      - name: Rename binary
-        run: mv ~/.cargo/bin/$BIN_NAME $BIN_FULL_NAME
-
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.BIN_FULL_NAME }}
-          path: ${{ env.BIN_FULL_NAME }}
+          name: ${{ env.BIN_TARGET }}
+          path: ~/.cargo/bin/${{ env.BIN_NAME }}
