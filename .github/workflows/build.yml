@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       BIN_VERSION: "0.15.2"
+      BIN_TAG: "argo-audit/v0.15.2"
       BIN_NAME: "cargo-audit"
       BIN_REPOSITORY: "rustsec/rustsec"
       BIN_TARGET: "aarch64-unknown-linux-musl"
@@ -22,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ${{ env.BIN_REPOSITORY }}
-          ref: cargo-audit/v${{ env.BIN_VERSION }}
+          ref: ${{ env.BIN_TAG }}
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
@@ -33,77 +34,60 @@ jobs:
             target: ${{ env.BIN_TARGET }}
 
       - name: Build binary with features
-        if: ${{ env.BIN_FEATURES }}
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: --package ${{ env.BIN_NAME }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }} --release
-
-      # - name: Build binary with features
-      #   if: ${{ env.BIN_FEATURES }}
-      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
-
-      # - name: Build binary
-      #   if: ${{ !env.BIN_FEATURES }}
-      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
+          args: --package ${{ env.BIN_NAME }} --features vendored-openssl --target ${{ env.BIN_TARGET }} --release
 
       - name: Check binary
-        run: target/$BIN_TARGET/release/$BIN_NAME --help
+        run: file target/$BIN_TARGET/release/$BIN_NAME
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
-          path: ~/.cargo/bin/${{ env.BIN_NAME }}
+          path: target/$BIN_TARGET/release/$BIN_NAME
 
-  # build-cargo-watch-aarch64:
-  #   name: Build cargo-watch
-  #   runs-on: ubuntu-20.04
-  #   env:
-  #     BIN_VERSION: "8.1.1"
-  #     BIN_NAME: "cargo-watch"
-  #     BIN_TARGET: "aarch64-unknown-linux-musl"
-  #   steps:
-  #     - uses: actions/checkout@v2
+  build-diesel-cli-aarch64:
+    name: Build diesel_cli
+    runs-on: ubuntu-20.04
+    env:
+      BIN_VERSION: "1.4.8"
+      BIN_TAG: "v1.4.8"
+      BIN_NAME: "diesel_cli"
+      BIN_REPOSITORY: "diesel-rs/diesel"
+      BIN_TARGET: "aarch64-unknown-linux-musl"
+    steps:
+      - name: Checkout internal repository
+        uses: actions/checkout@v2
 
-  #     - name: Install toolchain
-  #       uses: actions-rs/toolchain@v1
-  #       with:
-  #           override: true
-  #           toolchain: 1.56
-  #           profile: minimal
-  #           target: ${{ env.BIN_TARGET }}
+      - name: Checkout external repository
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.BIN_REPOSITORY }}
+          ref: ${{ env.BIN_TAG }}
 
-  #     - name: Build binary with features
-  #       if: ${{ env.BIN_FEATURES }}
-  #       uses: actions-rs/cargo@v1
-  #       with:
-  #         use-cross: true
-  #         command: install
-  #         args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }}
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+            override: true
+            toolchain: 1.56
+            profile: minimal
+            target: ${{ env.BIN_TARGET }}
 
-  #     - name: Build binary
-  #       if: ${{ !env.BIN_FEATURES }}
-  #       uses: actions-rs/cargo@v1
-  #       with:
-  #         use-cross: true
-  #         command: install
-  #         args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --target ${{ env.BIN_TARGET }}
+      - name: Build binary with features
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --package ${{ env.BIN_NAME }} --no-default-features --features postgres --target ${{ env.BIN_TARGET }} --release
 
-  #     # - name: Build binary with features
-  #     #   if: ${{ env.BIN_FEATURES }}
-  #     #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+      - name: Check binary
+        run: file target/$BIN_TARGET/release/$BIN_NAME
 
-  #     # - name: Build binary
-  #     #   if: ${{ !env.BIN_FEATURES }}
-  #     #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
-
-  #     - name: Check binary
-  #       run: ~/.cargo/bin/$BIN_NAME --help
-
-  #     - name: Upload binary
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
-  #         path: ~/.cargo/bin/${{ env.BIN_NAME }}
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
+          path: target/$BIN_TARGET/release/$BIN_NAME
