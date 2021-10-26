@@ -11,10 +11,18 @@ jobs:
     env:
       BIN_VERSION: "0.15.2"
       BIN_NAME: "cargo-audit"
+      BIN_REPOSITORY: "rustsec/rustsec"
       BIN_TARGET: "aarch64-unknown-linux-musl"
       BIN_FEATURES: "vendored-openssl"
     steps:
+      - name: Checkout internal repository
       - uses: actions/checkout@v2
+
+      - name: Checkout external repository
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ env.BIN_REPOSITORY }}
+          ref: cargo-audit/v${{ env.BIN_VERSION }}
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
@@ -29,16 +37,8 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
-          command: install
-          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }}
-
-      - name: Build binary
-        if: ${{ !env.BIN_FEATURES }}
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: install
-          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --target ${{ env.BIN_TARGET }}
+          command: build
+          args: --package ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }} --release
 
       # - name: Build binary with features
       #   if: ${{ env.BIN_FEATURES }}
@@ -49,7 +49,7 @@ jobs:
       #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
 
       - name: Check binary
-        run: ~/.cargo/bin/$BIN_NAME --help
+        run: target/$BIN_TARGET/release/$BIN_NAME --help
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
@@ -57,53 +57,53 @@ jobs:
           name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
           path: ~/.cargo/bin/${{ env.BIN_NAME }}
 
-  build-cargo-watch-aarch64:
-    name: Build cargo-watch
-    runs-on: ubuntu-20.04
-    env:
-      BIN_VERSION: "8.1.1"
-      BIN_NAME: "cargo-watch"
-      BIN_TARGET: "aarch64-unknown-linux-musl"
-    steps:
-      - uses: actions/checkout@v2
+  # build-cargo-watch-aarch64:
+  #   name: Build cargo-watch
+  #   runs-on: ubuntu-20.04
+  #   env:
+  #     BIN_VERSION: "8.1.1"
+  #     BIN_NAME: "cargo-watch"
+  #     BIN_TARGET: "aarch64-unknown-linux-musl"
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-            override: true
-            toolchain: 1.56
-            profile: minimal
-            target: ${{ env.BIN_TARGET }}
+  #     - name: Install toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #           override: true
+  #           toolchain: 1.56
+  #           profile: minimal
+  #           target: ${{ env.BIN_TARGET }}
 
-      - name: Build binary with features
-        if: ${{ env.BIN_FEATURES }}
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: install
-          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }}
+  #     - name: Build binary with features
+  #       if: ${{ env.BIN_FEATURES }}
+  #       uses: actions-rs/cargo@v1
+  #       with:
+  #         use-cross: true
+  #         command: install
+  #         args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --features ${{ env.BIN_FEATURES }} --target ${{ env.BIN_TARGET }}
 
-      - name: Build binary
-        if: ${{ !env.BIN_FEATURES }}
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: install
-          args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --target ${{ env.BIN_TARGET }}
+  #     - name: Build binary
+  #       if: ${{ !env.BIN_FEATURES }}
+  #       uses: actions-rs/cargo@v1
+  #       with:
+  #         use-cross: true
+  #         command: install
+  #         args: ${{ env.BIN_NAME }} --version ${{ env.BIN_VERSION }} --target ${{ env.BIN_TARGET }}
 
-      # - name: Build binary with features
-      #   if: ${{ env.BIN_FEATURES }}
-      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+  #     # - name: Build binary with features
+  #     #   if: ${{ env.BIN_FEATURES }}
+  #     #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
 
-      # - name: Build binary
-      #   if: ${{ !env.BIN_FEATURES }}
-      #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
+  #     # - name: Build binary
+  #     #   if: ${{ !env.BIN_FEATURES }}
+  #     #   run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET
 
-      - name: Check binary
-        run: ~/.cargo/bin/$BIN_NAME --help
+  #     - name: Check binary
+  #       run: ~/.cargo/bin/$BIN_NAME --help
 
-      - name: Upload binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
-          path: ~/.cargo/bin/${{ env.BIN_NAME }}
+  #     - name: Upload binary
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
+  #         path: ~/.cargo/bin/${{ env.BIN_NAME }}
