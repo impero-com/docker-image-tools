@@ -21,7 +21,6 @@ jobs:
         with:
             toolchain: 1.56
             override: true
-            target: ${{ env.BIN_TARGET }}
 
       - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
@@ -55,7 +54,6 @@ jobs:
         with:
             toolchain: 1.56
             override: true
-            target: ${{ env.BIN_TARGET }}
 
       - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
