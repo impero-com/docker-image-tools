@@ -19,6 +19,7 @@ jobs:
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
+            default: true
             override: true
             toolchain: 1.56
             profile: minimal
@@ -54,6 +55,7 @@ jobs:
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
+            default: true
             override: true
             toolchain: 1.56
             profile: minimal
