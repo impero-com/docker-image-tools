@@ -26,7 +26,7 @@ jobs:
         run: ./tools/fetch-cross.sh
 
       - name: Build binary
-        run: cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
+        run: ./cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
 
       - name: Check binary
         run: ~/.cargo/bin/$BIN_NAME --help

@@ -11,3 +11,4 @@ FORMAT=".tar.gz"
 URL=https://github.com/$REPO/$NAME/releases/download/$VERSION/$NAME-$VERSION-$TARGET$FORMAT
 
 curl --location $URL | tar xz
+chmod +x $NAME
