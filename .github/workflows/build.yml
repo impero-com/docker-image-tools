@@ -23,7 +23,7 @@ jobs:
             override: true
             target: ${{ env.BIN_TARGET }}
 
-      - name: Build binary
+      - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
         run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
 
@@ -44,7 +44,7 @@ jobs:
     name: Build cargo-watch
     runs-on: ubuntu-20.04
     env:
-      BIN_VERSION: "0.15.2"
+      BIN_VERSION: "8.1.1"
       BIN_NAME: "cargo-watch"
       BIN_TARGET: "aarch64-unknown-linux-musl"
     steps:
@@ -57,7 +57,7 @@ jobs:
             override: true
             target: ${{ env.BIN_TARGET }}
 
-      - name: Build binary
+      - name: Build binary with features
         if: ${{ env.BIN_FEATURES }}
         run: ./tools/bin/cross install $BIN_NAME --version $BIN_VERSION --target $BIN_TARGET --features $BIN_FEATURES
 
