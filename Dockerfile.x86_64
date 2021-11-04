@@ -1,0 +1,49 @@
+FROM debian:11-slim as build
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+    build-essential \
+    cmake \
+    curl \
+    git \
+    libssl-dev \
+    libpq-dev \
+    pkgconf
+
+# Set up Zig
+ENV ZIG_HOME=/usr/local/zig \
+    PATH=/usr/local/zig:$PATH
+
+RUN BUILD=zig-linux-aarch64-0.9.0-dev.1444+e2a2e6c14 && \
+    curl https://ziglang.org/builds/$BUILD.tar.xz | tar xJ && \
+    mv $BUILD/ $ZIG_HOME && \
+    chmod +x $ZIG_HOME/zig
+
+# Set up Rust
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH
+
+ARG TOOLCHAIN=nightly
+RUN curl https://sh.rustup.rs -sSf | sh -s -- \
+    --profile minimal --default-toolchain "$TOOLCHAIN" -y && \
+    rustup target add x86_64-unknown-linux-gnu
+
+# Set up Cargo/Zig interop
+COPY tools/aarch64 $ZIG_HOME/
+
+ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER="zig-cc-x86_64" \
+    # CARGO_TARGET_X86_64_UNKNOWN_LINUX_gnu_RUNNER="qemu-x86_64" \
+    CC_x86_64_unknown_linux_gnu="zig-cc-x86_64" \
+    CXX_x86_64_unknown_linux_gnu="zig-cxx-x86_64"
+
+RUN CC="zig-cc-x86_64" && \
+    CXX="zig-cxx-x86_64" && \
+    cargo install cargo-watch --target x86_64-unknown-linux-gnu
+
+RUN mv $CARGO_HOME/bin/cargo-watch /export/
+
+FROM scratch as export
+
+COPY --from=build /export /

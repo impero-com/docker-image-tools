@@ -1,0 +1,26 @@
+FROM debian:11-slim as build
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+    build-essential \
+    pkgconf \
+    cmake \
+    curl \
+    git \
+    libssl-dev \
+    libpq-dev \
+    g++-aarch64-linux-gnu \
+    libc6-dev-arm64-cross
+
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH
+
+ARG TOOLCHAIN=stable
+RUN curl https://sh.rustup.rs -sSf | sh -s -- \
+    --profile minimal --default-toolchain "$TOOLCHAIN" -y && \
+    rustup --version && \
+    cargo --version && \
+    rustc --version
+

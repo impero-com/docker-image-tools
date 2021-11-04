@@ -1,93 +1,93 @@
-name: Build tools
-on:
-  workflow_dispatch:
-  push:
-env:
-  CARGO_INCREMENTAL: 0
-jobs:
-  build-cargo-audit-aarch64:
-    name: Build cargo-audit
-    runs-on: ubuntu-20.04
-    env:
-      BIN_VERSION: "0.15.2"
-      BIN_TAG: "cargo-audit/v0.15.2"
-      BIN_NAME: "cargo-audit"
-      BIN_REPOSITORY: "rustsec/rustsec"
-      BIN_TARGET: "aarch64-unknown-linux-musl"
-      BIN_FEATURES: "vendored-openssl"
-    steps:
-      - name: Checkout internal repository
-        uses: actions/checkout@v2
+# name: Build tools
+# on:
+#   workflow_dispatch:
+#   push:
+# env:
+#   CARGO_INCREMENTAL: 0
+# jobs:
+#   build-cargo-audit-aarch64:
+#     name: Build cargo-audit
+#     runs-on: ubuntu-20.04
+#     env:
+#       BIN_VERSION: "0.15.2"
+#       BIN_TAG: "cargo-audit/v0.15.2"
+#       BIN_NAME: "cargo-audit"
+#       BIN_REPOSITORY: "rustsec/rustsec"
+#       BIN_TARGET: "aarch64-unknown-linux-musl"
+#       BIN_FEATURES: "vendored-openssl"
+#     steps:
+#       - name: Checkout internal repository
+#         uses: actions/checkout@v2
 
-      - name: Checkout external repository
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.BIN_REPOSITORY }}
-          ref: ${{ env.BIN_TAG }}
+#       - name: Checkout external repository
+#         uses: actions/checkout@v2
+#         with:
+#           repository: ${{ env.BIN_REPOSITORY }}
+#           ref: ${{ env.BIN_TAG }}
 
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-            override: true
-            toolchain: 1.56
-            profile: minimal
-            target: ${{ env.BIN_TARGET }}
+#       - name: Install toolchain
+#         uses: actions-rs/toolchain@v1
+#         with:
+#             override: true
+#             toolchain: 1.56
+#             profile: minimal
+#             target: ${{ env.BIN_TARGET }}
 
-      - name: Build binary with features
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: build
-          args: --package ${{ env.BIN_NAME }} --features vendored-openssl --target ${{ env.BIN_TARGET }} --release
+#       - name: Build binary with features
+#         uses: actions-rs/cargo@v1
+#         with:
+#           use-cross: true
+#           command: build
+#           args: --package ${{ env.BIN_NAME }} --features vendored-openssl --target ${{ env.BIN_TARGET }} --release
 
-      - name: Check binary
-        run: file target/$BIN_TARGET/release/$BIN_NAME
+#       - name: Check binary
+#         run: file target/$BIN_TARGET/release/$BIN_NAME
 
-      - name: Upload binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
-          path: target/${{ env.BIN_TARGET }}/release/${{ env.BIN_NAME }}
+#       - name: Upload binary
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
+#           path: target/${{ env.BIN_TARGET }}/release/${{ env.BIN_NAME }}
 
-  build-diesel-cli-aarch64:
-    name: Build diesel_cli
-    runs-on: ubuntu-20.04
-    env:
-      BIN_VERSION: "1.4.8"
-      BIN_TAG: "v1.4.8"
-      BIN_NAME: "diesel_cli"
-      BIN_REPOSITORY: "diesel-rs/diesel"
-      BIN_TARGET: "aarch64-unknown-linux-musl"
-    steps:
-      - name: Checkout internal repository
-        uses: actions/checkout@v2
+#   build-diesel-cli-aarch64:
+#     name: Build diesel_cli
+#     runs-on: ubuntu-20.04
+#     env:
+#       BIN_VERSION: "1.4.8"
+#       BIN_TAG: "v1.4.8"
+#       BIN_NAME: "diesel_cli"
+#       BIN_REPOSITORY: "diesel-rs/diesel"
+#       BIN_TARGET: "aarch64-unknown-linux-musl"
+#     steps:
+#       - name: Checkout internal repository
+#         uses: actions/checkout@v2
 
-      - name: Checkout external repository
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.BIN_REPOSITORY }}
-          ref: ${{ env.BIN_TAG }}
+#       - name: Checkout external repository
+#         uses: actions/checkout@v2
+#         with:
+#           repository: ${{ env.BIN_REPOSITORY }}
+#           ref: ${{ env.BIN_TAG }}
 
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-            override: true
-            toolchain: 1.56
-            profile: minimal
-            target: ${{ env.BIN_TARGET }}
+#       - name: Install toolchain
+#         uses: actions-rs/toolchain@v1
+#         with:
+#             override: true
+#             toolchain: 1.56
+#             profile: minimal
+#             target: ${{ env.BIN_TARGET }}
 
-      - name: Build binary with features
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: build
-          args: --package ${{ env.BIN_NAME }} --no-default-features --features postgres --target ${{ env.BIN_TARGET }} --release
+#       - name: Build binary with features
+#         uses: actions-rs/cargo@v1
+#         with:
+#           use-cross: true
+#           command: build
+#           args: --package ${{ env.BIN_NAME }} --no-default-features --features postgres --target ${{ env.BIN_TARGET }} --release
 
-      - name: Check binary
-        run: file target/$BIN_TARGET/release/$BIN_NAME
+#       - name: Check binary
+#         run: file target/$BIN_TARGET/release/$BIN_NAME
 
-      - name: Upload binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
-          path: target/${{ env.BIN_TARGET }}/release/${{ env.BIN_NAME }}
+#       - name: Upload binary
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: ${{ env.BIN_NAME }}-${{ env.BIN_VERSION }}-${{ env.BIN_TARGET }}
+#           path: target/${{ env.BIN_TARGET }}/release/${{ env.BIN_NAME }}
