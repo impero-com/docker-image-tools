@@ -8,7 +8,7 @@ jobs:
   build-x86_64:
     name: Build Tools (x86_64)
     runs-on: ubuntu-21.04
-    image: impero-com/cross
+    container: impero-com/cross
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
   build-aarch64:
     name: Build Tools (aarch64)
     runs-on: ubuntu-21.04
-    image: impero-com/cross
+    container: impero-com/cross
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
