@@ -1,5 +1,5 @@
 #!/bin/bash
 set -eu
 
-scripts/build.sh aarch64-unknown-linux-gnu
-scripts/export.sh /tools/aarch64
+scripts/docker/build.sh aarch64-unknown-linux-gnu
+scripts/docker/export.sh /tools/aarch64
