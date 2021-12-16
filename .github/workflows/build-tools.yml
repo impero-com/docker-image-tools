@@ -1,7 +1,14 @@
 name: Build Tools
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Build Docker Image"]
+    types:
+      - completed
   push:
+    paths:
+      - scripts/docker/build.sh
+      - scripts/docker/export.sh
 env:
   CARGO_INCREMENTAL: 0
 jobs:
@@ -14,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build binaries
-        run: ./scripts/docker/x86_64.sh
+        run: ./scripts/docker/build_export.sh x86_64
 
       - name: Check binaries
         run: ls -lh /tools/x86_64
@@ -33,7 +40,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build binaries
-        run: ./scripts/docker/aarch64.sh
+        run: ./scripts/docker/build_export.sh aarch64
 
       - name: Check binaries
         run: ls -lh /tools/aarch64

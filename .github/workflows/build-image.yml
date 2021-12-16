@@ -6,7 +6,7 @@ on:
     paths:
       - 'Dockerfile'
       - 'cargo'
-      - 'scripts/docker'
+      - 'scripts/docker/install.sh'
 jobs:
   build:
     name: Build Image
