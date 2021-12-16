@@ -12,6 +12,7 @@ on:
       - '!Dockerfile'
       - '!cargo'
       - '!scripts/docker/install.sh'
+      - '!.github/workflows/build-image.yml'
 
       - '.github/workflows/build-tools.yml'
 env:

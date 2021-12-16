@@ -6,10 +6,10 @@ on:
     paths:
       # Update build-tools.yml accordingly
       # if you change any of the paths here
+      # including the last
       - 'Dockerfile'
       - 'cargo'
-      - 'scripts/docker/install.sh'
-
+      - 'scripts/docker/install.sh' 
       - '.github/workflows/build-image.yml'
 jobs:
   build:
