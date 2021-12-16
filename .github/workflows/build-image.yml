@@ -9,6 +9,8 @@ on:
       - 'Dockerfile'
       - 'cargo'
       - 'scripts/docker/install.sh'
+
+      - '.github/workflows/build-image.yml'
 jobs:
   build:
     name: Build Image

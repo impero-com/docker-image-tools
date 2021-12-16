@@ -12,6 +12,8 @@ on:
       - '!Dockerfile'
       - '!cargo'
       - '!scripts/docker/install.sh'
+
+      - '.github/workflows/build-tools.yml'
 env:
   CARGO_INCREMENTAL: 0
 jobs:
