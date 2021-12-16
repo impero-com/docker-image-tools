@@ -71,6 +71,9 @@ jobs:
       - name: Check downloaded binaries (aarch64)
         run: ls -lh aarch64/
 
+      - name: Zip binaries
+        run: zip -0 x86_64.zip x86_64 && zip -0 aarch64.zip aarch64
+
       - name: Extract tag name
         run: echo GITHUB_TAG="${GITHUB_REF##refs/tags/}" >> $GITHUB_ENV
 
@@ -78,6 +81,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            x86_64
-            aarch64
+            x86_64.zip
+            aarch64.zip
           name: ${{ env.GITHUB_TAG }}
