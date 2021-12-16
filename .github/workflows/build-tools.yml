@@ -72,7 +72,7 @@ jobs:
         run: ls -lh aarch64/
 
       - name: Zip binaries
-        run: zip -0 x86_64.zip x86_64 && zip -0 aarch64.zip aarch64
+        run: zip -r x86_64.zip x86_64 && zip -r aarch64.zip aarch64
 
       - name: Extract tag name
         run: echo GITHUB_TAG="${GITHUB_REF##refs/tags/}" >> $GITHUB_ENV
