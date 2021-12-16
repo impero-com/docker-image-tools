@@ -22,6 +22,7 @@ case "$1" in
         cd openssl && \
             ./Configure linux-arm64 --cross-compile-prefix=arm64-linux-gnu- --prefix=/usr/arm64-linux-gnu && \
             make
+        cd .. && rm -rf openssl
 
         # Build libpq
         git clone https://github.com/postgres/postgres.git --depth 1
@@ -30,6 +31,10 @@ case "$1" in
             ./configure --host=arm64-linux-gnu --prefix=/usr/arm64-linux-gnu --without-zlib --without-readline && \
             cd src/interfaces/libpq && make install && \
             cd ../../bin/pg_config && make && make install
+
+        cd .. && rm -rf postgres
+
+        rm -rf /tmp
         ;;
     x86_64-unknown-linux-gnu)
         if [[ "$(uname -m)" == "x86_64" ]]; then
@@ -50,6 +55,7 @@ case "$1" in
         cd openssl && \
             ./Configure linux-x86_64 --cross-compile-prefix=x86_64-linux-gnu- --prefix=/usr/x86_64-linux-gnu && \
             make
+        cd .. && rm -rf openssl
 
         # Build libpq
         git clone https://github.com/postgres/postgres.git --depth 1
@@ -58,6 +64,9 @@ case "$1" in
             ./configure --host=x86_64-linux-gnu --prefix=/usr/x86_64-linux-gnu --without-zlib --without-readline && \
             cd src/interfaces/libpq && make install && \
             cd ../../bin/pg_config && make && make install
+        cd .. && rm -rf postgres
+
+        rm -rf /tmp
         ;;
     *)
         echo "Unsupported target: $1"
