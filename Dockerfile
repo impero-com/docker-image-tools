@@ -1,6 +1,7 @@
-FROM ubuntu:21.04
+FROM ubuntu:20.04
 
 ARG TOOLCHAIN=nightly
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -20,11 +21,12 @@ ENV RUSTUP_HOME=/usr/local/rustup \
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- \
     --profile minimal --default-toolchain "$TOOLCHAIN" -y && \
-    rustup --version && \
+    rustup target add aarch64-unknown-linux-gnu && \
+    rustup target add x86_64-unknown-linux-gnu
+
+RUN rustup --version && \
     cargo --version && \
-    rustc --version && \
-    rustup target add x86_64-unknown-linux-gnu && \
-    rustup target add aarch64-unknown-linux-gnu
+    rustc --version
 
 # Set up cross compilation environment
 COPY cargo/. /cargo
