@@ -4,6 +4,8 @@ on:
   push:
     branches: [ master ]
     paths:
+      # Update build-tools.yml accordingly
+      # if you change any of the paths here
       - 'Dockerfile'
       - 'cargo'
       - 'scripts/docker/install.sh'

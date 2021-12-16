@@ -7,8 +7,11 @@ on:
       - completed
   push:
     paths:
-      - scripts/docker/build.sh
-      - scripts/docker/export.sh
+      # Do not trigger this workflow if
+      # the Docker image workflow was triggered
+      - '!Dockerfile'
+      - '!cargo'
+      - '!scripts/docker/install.sh'
 env:
   CARGO_INCREMENTAL: 0
 jobs:

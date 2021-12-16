@@ -1,6 +1,5 @@
 name: Create Release
 on:
-  workflow_dispatch:
   push:
     tags:
       - "v*"
@@ -9,23 +8,12 @@ jobs:
     name: Create Release
     runs-on: ubuntu-20.04
     steps:
-      - name: Download binaries (x86_64)
+      - name: Download binaries
         uses: impero-com/action-download-artifact@v2
         with:
           workflow: build-tools.yml
           workflow_conclusion: success
           branch: master
-          name: x86_64
-          commit: ${{ github.sha }}
-          path: ${{ github.workspace }}
-
-      - name: Download binaries (aarch64)
-        uses: impero-com/action-download-artifact@v2
-        with:
-          workflow: build-tools.yml
-          workflow_conclusion: success
-          branch: master
-          name: aarch64
           commit: ${{ github.sha }}
           path: ${{ github.workspace }}
 
@@ -35,8 +23,8 @@ jobs:
       - name: Check downloaded binaries (aarch64)
         run: ls -lh aarch64/
 
-      - name: Get tag name
-        run: echo GITHUB_TAG="${GITHUB_REF##refs/tags/}" >> $GITHUB_ENV
+      - name: Extract version name
+        run: echo VERSION="${GITHUB_REF##refs/tags/}" >> $GITHUB_ENV
 
       - name: Create release
         uses: softprops/action-gh-release@v1
@@ -44,4 +32,4 @@ jobs:
           files: |
             x86_64
             aarch64
-          name: ${{ env.GITHUB_TAG }}
+          name: ${{ env.VERSION }}
