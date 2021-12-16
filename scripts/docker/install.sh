@@ -34,7 +34,7 @@ case "$1" in
 
         cd .. && rm -rf postgres
 
-        rm -rf /tmp
+        rm -rf /tmp/*
         ;;
     x86_64-unknown-linux-gnu)
         if [[ "$(uname -m)" == "x86_64" ]]; then
@@ -66,7 +66,7 @@ case "$1" in
             cd ../../bin/pg_config && make && make install
         cd .. && rm -rf postgres
 
-        rm -rf /tmp
+        rm -rf /tmp/*
         ;;
     *)
         echo "Unsupported target: $1"
