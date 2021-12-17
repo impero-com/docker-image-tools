@@ -7,7 +7,7 @@ The image uses native cross-compilation to build the tools for both `x86_64` and
 The workflow will build the Docker image if necessary, and push it to Docker hub.
 
 ### Compile binaries
-The tools will be built on every commit, and provided as artifacts.
+The tools will be built when `scripts/build.sh` or `scripts/export.sh` change, or when a new image has been built. They are provided as artifacts.
 
 ### Release
 If a commit is tagged, the workflow will run, and a new release will be created. The tools will be uploaded as assets in the release. The release will have the same name as the tag.
