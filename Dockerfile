@@ -28,8 +28,8 @@ RUN rustup --version && \
     rustc --version
 
 # Set up cross compilation environment
-COPY cargo/. /cargo
-RUN cp /cargo/$(uname -m)/* $CARGO_HOME/ && ls -lh $CARGO_HOME && rm -r /cargo
+COPY .cargo /.cargo
+RUN cp /.cargo/* $CARGO_HOME/ && rm -rf /.cargo
 
-COPY scripts/docker/ scripts/
-RUN scripts/install.sh aarch64-unknown-linux-gnu
+COPY scripts/ scripts/
+RUN scripts/install.sh

@@ -27,7 +27,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build binaries
-        run: ./scripts/docker/build_export.sh x86_64
+        run: ./scripts/build.sh x86_64-unknown-linux-gnu
+
+      - name: Export binaries
+        run: ./scripts/export.sh /tools/x86_64
 
       - name: Check binaries
         run: ls -lh /tools/x86_64
@@ -46,7 +49,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build binaries
-        run: ./scripts/docker/build_export.sh aarch64
+        run: ./scripts/build.sh aarch64-unknown-linux-gnu
+
+      - name: Export binaries
+        run: ./scripts/export.sh /tools/aarch64
 
       - name: Check binaries
         run: ls -lh /tools/aarch64
