@@ -8,8 +8,8 @@ on:
       # if you change any of the paths here
       # including the last
       - 'Dockerfile'
-      - 'cargo'
-      - 'scripts/docker/install.sh' 
+      - '.cargo'
+      - 'scripts/install.sh' 
       - '.github/workflows/build-image.yml'
 jobs:
   build:

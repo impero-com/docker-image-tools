@@ -10,8 +10,8 @@ on:
       # Do not trigger this workflow if
       # the Docker image workflow was triggered
       - '!Dockerfile'
-      - '!cargo'
-      - '!scripts/docker/install.sh'
+      - '!.cargo'
+      - '!scripts/install.sh'
       - '!.github/workflows/build-image.yml'
 
       - '.github/workflows/build-tools.yml'
@@ -23,45 +23,33 @@ jobs:
     runs-on: ubuntu-20.04
     container: imperocom/cross-compiler
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Build binaries
-        run: ./scripts/build.sh x86_64-unknown-linux-gnu
+        run: /scripts/build.sh x86_64-unknown-linux-gnu
 
       - name: Export binaries
-        run: ./scripts/export.sh /tools/x86_64
-
-      - name: Check binaries
-        run: ls -lh /tools/x86_64
+        run: /scripts/export.sh /export
 
       - name: Upload binaries
         uses: actions/upload-artifact@v2
         with:
           name: x86_64
-          path: /tools/x86_64
+          path: /export
   build-aarch64:
     name: Build Tools (aarch64)
     runs-on: ubuntu-20.04
     container: imperocom/cross-compiler
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Build binaries
-        run: ./scripts/build.sh aarch64-unknown-linux-gnu
+        run: /scripts/build.sh aarch64-unknown-linux-gnu
 
       - name: Export binaries
-        run: ./scripts/export.sh /tools/aarch64
-
-      - name: Check binaries
-        run: ls -lh /tools/aarch64
+        run: /scripts/export.sh /export
 
       - name: Upload binaries
         uses: actions/upload-artifact@v2
         with:
           name: aarch64
-          path: /tools/aarch64
+          path: /export
   create-release:
     name: Create Release
     runs-on: ubuntu-20.04
