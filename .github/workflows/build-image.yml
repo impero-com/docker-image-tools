@@ -2,7 +2,6 @@ name: Build Docker Image
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
     paths:
       # Update build-tools.yml accordingly
       # if you change any of the paths here
@@ -19,6 +18,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - run: echo GITHUB_BRANCH="${GITHUB_REF##refs/heads/}" >> $GITHUB_ENV
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -28,6 +29,6 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v2
         with:
-          push: true
+          push: ${{ env.GITHUB_BRANCH == 'master' }}
           context: .
           tags: imperocom/cross-compiler:latest

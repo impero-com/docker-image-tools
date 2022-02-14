@@ -11,14 +11,14 @@ export PKG_CONFIG_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-confi
 export PKG_CONFIG_PATH_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-config
 
 # Build libssl
-git clone https://github.com/openssl/openssl.git --depth 1
+git clone https://github.com/openssl/openssl.git --depth 1 --branch OpenSSL_1_1_1m
 cd openssl && \
     ./Configure linux-arm64 --cross-compile-prefix=aarch64-linux-gnu- --prefix=/usr/aarch64-linux-gnu && \
     make
 cd .. && rm -rf openssl
 
 # Build libpq
-git clone https://github.com/postgres/postgres.git --depth 1
+git clone https://github.com/postgres/postgres.git --depth 1 --branch REL_11_15
 cd postgres && \
     CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ AR=aarch64-linux-gnu-ar RANLIB=aarch64-linux-gnu-ranlib; \
     ./configure --host=aarch64-linux-gnu --prefix=/usr/aarch64-linux-gnu --without-zlib --without-readline && \
