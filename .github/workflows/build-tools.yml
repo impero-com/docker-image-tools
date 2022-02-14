@@ -20,10 +20,11 @@ on:
 env:
   CARGO_INCREMENTAL: 0
 jobs:
-  build-x86_64:
+  build-x86_64-master:
     name: Build Tools (x86_64)
     runs-on: ubuntu-20.04
-    container: imperocom/cross-compiler
+    container: imperocom/cross-compiler:master
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Build binaries
         run: /scripts/build.sh x86_64-unknown-linux-gnu
@@ -37,10 +38,47 @@ jobs:
           name: x86_64
           path: /export
 
-  build-aarch64:
+  build-aarch64-master:
     name: Build Tools (aarch64)
     runs-on: ubuntu-20.04
-    container: imperocom/cross-compiler
+    container: imperocom/cross-compiler:master
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Build binaries
+        run: /scripts/build.sh aarch64-unknown-linux-gnu
+
+      - name: Export binaries
+        run: /scripts/export.sh /export
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: aarch64
+          path: /export
+
+  build-x86_64-latest:
+    name: Build Tools (x86_64)
+    runs-on: ubuntu-20.04
+    container: imperocom/cross-compiler:latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Build binaries
+        run: /scripts/build.sh x86_64-unknown-linux-gnu
+
+      - name: Export binaries
+        run: /scripts/export.sh /export
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: x86_64
+          path: /export
+
+  build-aarch64-latest:
+    name: Build Tools (aarch64)
+    runs-on: ubuntu-20.04
+    container: imperocom/cross-compiler:latest
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Build binaries
         run: /scripts/build.sh aarch64-unknown-linux-gnu
@@ -57,7 +95,7 @@ jobs:
   create-release:
     name: Create Release
     runs-on: ubuntu-20.04
-    needs: [build-x86_64, build-aarch64]
+    needs: [build-x86_64-latest, build-aarch64-latest]
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download binaries
