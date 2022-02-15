@@ -1,0 +1,38 @@
+name: Cleanup
+on:
+  workflow_run:
+    workflows: ["Builds finished"]
+    types:
+      - completed
+jobs:     
+  delete-image-artifact:
+    name: Delete unused artifact
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Delete image artifact
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            console.log(github);
+            console.log(context);
+            const runId = context.payload.workflow_run.id;
+            # console.log(`Retrieving artifacts for ${context.runId}...`);
+            # const response = await github.rest.actions.listWorkflowRunArtifacts({
+            #   owner: context.repo.owner,
+            #   repo: context.repo.repo,
+            #   run_id: context.runId,
+            # });
+            # console.log('Artifacts:');
+            # console.log(response);
+            # const image = response.data.artifacts.find(artifact => artifact.name === "image");
+            # if (image !== null) {
+            #   console.log(`Deleting artifact ${image.name} (${image.id})...`);
+            #   const del = await octokit.rest.actions.deleteArtifact({
+            #     owner: context.repo.owner,
+            #     repo: context.repo.repo,
+            #     artifact_id: image.id,
+            #   });
+            #   console.log('Response:');
+            #   console.log(del);
+            # }
