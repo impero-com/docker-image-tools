@@ -1,10 +1,10 @@
 name: Cleanup
 on:
   workflow_run:
-    workflows: ["Builds finished"]
+    workflows: ["CI"]
     types:
       - completed
-jobs:     
+jobs:
   delete-image-artifact:
     name: Delete unused artifact
     runs-on: ubuntu-20.04
