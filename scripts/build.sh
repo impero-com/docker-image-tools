@@ -6,3 +6,10 @@ cargo install diesel_cli --version 1.4.1 --no-default-features --features postgr
 cargo install diesel_cli_ext --version 0.3.6 --target "$1"
 cargo install cargo-audit --version 0.15.0 --features vendored-openssl --target "$1"
 cargo install cargo-watch --version 8.1.1 --target "$1"
+
+mkdir -p /export/$1
+cp $CARGO_HOME/bin/sccache /export/$1/
+cp $CARGO_HOME/bin/diesel /export/$1/
+cp $CARGO_HOME/bin/diesel_ext /export/$1/
+cp $CARGO_HOME/bin/cargo-audit /export/$1/
+cp $CARGO_HOME/bin/cargo-watch /export/$1/

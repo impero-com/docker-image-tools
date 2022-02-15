@@ -1,0 +1,118 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  build-image:
+    name: Build Docker Image
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and export
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: gcc-cc
+          outputs: type=docker,dest=/tmp/image.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: image
+          path: /tmp/image.tar
+
+  build-aarch64:
+    name: Build Binaries (aarch64) 
+    runs-on: ubuntu-20.04
+    needs: [build-image]
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: image
+          path: /tmp
+
+      - name: Load & Build
+        run: |
+          docker load --input /tmp/image.tar
+          docker run -i --name builder gcc-cc \
+            /scripts/build.sh aarch64-unknown-linux-gnu
+          docker cp builder:/export/aarch64-unknown-linux-gnu /tmp/aarch64-unknown-linux-gnu
+          docker rm -f builder
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: aarch64
+          path: /tmp/aarch64-unknown-linux-gnu
+
+  build-x86_64:
+    name: Build Binaries (x86_64)
+    runs-on: ubuntu-20.04
+    needs: [build-image]
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: image
+          path: /tmp
+
+      - name: Load & Build
+        run: |
+          docker load --input /tmp/image.tar
+          docker run -i --name builder imperocom/cross-compiler:master \
+            /scripts/build.sh x86_64-unknown-linux-gnu
+          docker cp builder:/export/x86_64-unknown-linux-gnu /tmp/x86_64-unknown-linux-gnu
+          docker rm -f builder
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: x86_64
+          path: /tmp/x86_64-unknown-linux-gnu
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-20.04
+    needs: [build-aarch64, build-x86_64]
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download binaries
+        uses: actions/download-artifact@v2
+
+      - name: Check downloaded binaries (x86_64)
+        run: ls -lh x86_64/
+
+      - name: Check downloaded binaries (aarch64)
+        run: ls -lh aarch64/
+
+      - name: Zip binaries
+        run: zip -r x86_64.zip x86_64 && zip -r aarch64.zip aarch64
+
+      - name: Extract tag name
+        run: echo GITHUB_TAG="${GITHUB_REF##refs/tags/}" >> $GITHUB_ENV
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            x86_64.zip
+            aarch64.zip
+          name: ${{ env.GITHUB_TAG }}
