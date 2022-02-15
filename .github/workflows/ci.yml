@@ -94,7 +94,7 @@ jobs:
     needs: [build-aarch64, build-x86_64]
     steps:
       - name: Delete image artifact
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           github-token: ${{ github.token }}
           script: |
