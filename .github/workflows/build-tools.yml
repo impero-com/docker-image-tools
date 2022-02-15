@@ -7,6 +7,9 @@ on:
       - completed
   push:
     paths:
+      - '.github/workflows/build-tools.yml'
+      - 'scripts/build.sh'
+      - 'scripts/export.sh'
       # Do not trigger this workflow if
       # the Docker image workflow was triggered
       - '!Dockerfile'
@@ -14,14 +17,11 @@ on:
       - '!scripts/install.sh'
       - '!.github/workflows/build-image.yml'
 
-      - '.github/workflows/build-tools.yml'
-      - 'scripts/build.sh'
-      - 'scripts/export.sh'
 env:
   CARGO_INCREMENTAL: 0
 jobs:
   build-x86_64-master:
-    name: Build Tools (x86_64)
+    name: Build Tools (x86_64/master)
     runs-on: ubuntu-20.04
     container: imperocom/cross-compiler:master
     if: github.ref == 'refs/heads/master'
@@ -39,7 +39,7 @@ jobs:
           path: /export
 
   build-aarch64-master:
-    name: Build Tools (aarch64)
+    name: Build Tools (aarch64/master)
     runs-on: ubuntu-20.04
     container: imperocom/cross-compiler:master
     if: github.ref == 'refs/heads/master'
@@ -57,7 +57,7 @@ jobs:
           path: /export
 
   build-x86_64-latest:
-    name: Build Tools (x86_64)
+    name: Build Tools (x86_64/latest)
     runs-on: ubuntu-20.04
     container: imperocom/cross-compiler:latest
     if: startsWith(github.ref, 'refs/tags/')
@@ -75,7 +75,7 @@ jobs:
           path: /export
 
   build-aarch64-latest:
-    name: Build Tools (aarch64)
+    name: Build Tools (aarch64/latest)
     runs-on: ubuntu-20.04
     container: imperocom/cross-compiler:latest
     if: startsWith(github.ref, 'refs/tags/')
