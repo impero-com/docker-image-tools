@@ -92,7 +92,8 @@ jobs:
     name: Builds finished
     runs-on: ubuntu-20.04
     needs: [build-aarch64, build-x86_64]
-    steps: []
+    steps:
+      - run: echo "Done."
 
   create-release:
     name: Create Release
