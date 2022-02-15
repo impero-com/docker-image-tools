@@ -98,10 +98,23 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            const workflowId = "${{github.run_id}}";
-            const response = await github.request(`GET /repos/$/actions/runs/${workflowId}/artifacts`);
-            const image = response.data.artifacts.find(artifact => artifact.name === "image");
-            await github.request(`DELETE /repos/$/actions/artifacts/${image.id}`);
+            console.log(`Retrieving artifacts for ${context.runId}...`);
+            const { data } = github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
+            console.log('Artifacts:');
+            console.log(data);
+            const image = data.artifacts.find(artifact => artifact.name === "image");
+            console.log(`Deleting artifact ${image.name} (${image.id})...`);
+            const del = await octokit.rest.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: image.id,
+            });
+            console.log('Response:');
+            console.log(del);
 
   create-release:
     name: Create Release
