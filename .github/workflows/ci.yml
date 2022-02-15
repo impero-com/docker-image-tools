@@ -88,6 +88,21 @@ jobs:
           name: x86_64
           path: /tmp/x86_64-unknown-linux-gnu
 
+  delete-image-artifact:
+    name: Delete unused artifact
+    runs-on: ubuntu-20.04
+    needs: [build-aarch64, build-x86_64]
+    steps:
+      - name: Delete image artifact
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const workflowId = "${{github.run_id}}";
+            const response = await github.request(`GET /repos/$/actions/runs/${workflowId}/artifacts`);
+            const image = response.data.artifacts.find(artifact => artifact.name === "image");
+            await github.request(`DELETE /repos/$/actions/artifacts/${image.id}`);
+
   create-release:
     name: Create Release
     runs-on: ubuntu-20.04
