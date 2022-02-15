@@ -77,7 +77,7 @@ jobs:
       - name: Load & Build
         run: |
           docker load --input /tmp/image.tar
-          docker run -i --name builder imperocom/cross-compiler:master \
+          docker run -i --name builder gcc-cc \
             /scripts/build.sh x86_64-unknown-linux-gnu
           docker cp builder:/export/x86_64-unknown-linux-gnu /tmp/x86_64-unknown-linux-gnu
           docker rm -f builder
