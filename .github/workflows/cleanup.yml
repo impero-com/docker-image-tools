@@ -14,11 +14,6 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            console.log(github);
-            console.log(context);
-            console.log(context.repo);
-            console.log(context.payload.repository.owner);
-
             const runId = context.payload.workflow_run.id;
             console.log(`Retrieving artifacts for ${context.runId}...`);
             const response = await github.rest.actions.listWorkflowRunArtifacts({
@@ -26,16 +21,16 @@ jobs:
               repo: context.repo.repo,
               run_id: runId,
             });
-            console.log('Artifacts:');
-            console.log(response);
             const image = response.data.artifacts.find(artifact => artifact.name === "image");
             if (image !== null) {
-              console.log(`Deleting artifact ${image.name} (${image.id})...`);
+              console.log(`Deleting artifact "${image.name}" (id: ${image.id})...`);
               const del = await github.rest.actions.deleteArtifact({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 artifact_id: image.id,
               });
-              console.log('Response:');
-              console.log(del);
+              if (del.status >= 300) {
+                console.log('Deletion was unsuccessful:');
+                console.log(del);
+              }
             }
