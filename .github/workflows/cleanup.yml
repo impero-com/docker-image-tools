@@ -31,7 +31,7 @@ jobs:
             const image = response.data.artifacts.find(artifact => artifact.name === "image");
             if (image !== null) {
               console.log(`Deleting artifact ${image.name} (${image.id})...`);
-              const del = await octokit.rest.actions.deleteArtifact({
+              const del = await github.rest.actions.deleteArtifact({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 artifact_id: image.id,
