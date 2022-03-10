@@ -11,6 +11,7 @@ RUN apt-get update && \
     make \
     bison \
     flex \
+    pkg-config \
     libssl-dev \
     libpq-dev
 

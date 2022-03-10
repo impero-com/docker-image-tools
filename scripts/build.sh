@@ -11,6 +11,9 @@ cargo install cargo-audit --version 0.15.0 --features vendored-openssl --target 
 printf "\n"
 cargo install cargo-watch --version 8.1.1 --target "$1"
 printf "\n"
+# For doing live reload of documentation
+cargo install penguin-app --version 0.2.2 --target "$1"
+printf "\n"
 
 echo "Copying files to /export/$1"
 mkdir -p /export/$1
@@ -19,3 +22,4 @@ cp $CARGO_HOME/bin/diesel /export/$1/
 cp $CARGO_HOME/bin/diesel_ext /export/$1/
 cp $CARGO_HOME/bin/cargo-audit /export/$1/
 cp $CARGO_HOME/bin/cargo-watch /export/$1/
+cp $CARGO_HOME/bin/penguin /export/$1/
