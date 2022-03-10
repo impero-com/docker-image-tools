@@ -9,6 +9,7 @@ apt-get install -qq \
 
 export PKG_CONFIG_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-config
 export PKG_CONFIG_PATH_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-config
+export PKG_CONFIG_SYSROOT_DIR =/usr/aarch64-linux-gnu
 
 # Build libssl
 git clone https://github.com/openssl/openssl.git --depth 1 --branch OpenSSL_1_1_1m
