@@ -7,14 +7,11 @@ apt-get install -qq \
     libc6-dev-arm64-cross \
     pkg-config-aarch64-linux-gnu
 
-export PKG_CONFIG_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-config
-export PKG_CONFIG_PATH_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-config
-
 # Build libssl
 git clone https://github.com/openssl/openssl.git --depth 1 --branch OpenSSL_1_1_1m
 cd openssl && \
-    ./Configure linux-arm64 --cross-compile-prefix=aarch64-linux-gnu- --prefix=/usr/aarch64-linux-gnu && \
-    make
+    ./Configure linux-aarch64 --cross-compile-prefix=aarch64-linux-gnu- --prefix=/usr/aarch64-linux-gnu && \
+    make && make install
 cd .. && rm -rf openssl
 
 # Build libpq
