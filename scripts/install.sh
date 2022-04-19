@@ -12,10 +12,10 @@ export PKG_CONFIG_PATH_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-
 export PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu
 
 printf "\n"
-printf "ls /usr/aarch64-linux-gnu/bin:"
+printf "ls /usr/aarch64-linux-gnu/bin:\n"
 ls /usr/aarch64-linux-gnu/bin
 printf "\n"
-printf "/usr/aarch64-linux-gnu/include:"
+printf "/usr/aarch64-linux-gnu/include:\n"
 ls /usr/aarch64-linux-gnu/include
 printf "\n"
 printf "/usr/aarch64-linux-gnu/lib"
@@ -25,18 +25,18 @@ printf "\n"
 # Build libssl
 git clone https://github.com/openssl/openssl.git --depth 1 --branch OpenSSL_1_1_1m
 cd openssl && \
-    ./Configure linux-arm64 --cross-compile-prefix=aarch64-linux-gnu- --prefix=/usr/aarch64-linux-gnu && \
+    ./Configure linux-aarch64 --cross-compile-prefix=aarch64-linux-gnu- --prefix=/usr/aarch64-linux-gnu && \
     make
 cd .. && rm -rf openssl
 
 printf "\n"
-printf "ls /usr/aarch64-linux-gnu/bin:"
+printf "ls /usr/aarch64-linux-gnu/bin:\n"
 ls /usr/aarch64-linux-gnu/bin
 printf "\n"
-printf "/usr/aarch64-linux-gnu/include:"
+printf "/usr/aarch64-linux-gnu/include:\n"
 ls /usr/aarch64-linux-gnu/include
 printf "\n"
-printf "/usr/aarch64-linux-gnu/lib"
+printf "/usr/aarch64-linux-gnu/lib:\n"
 ls /usr/aarch64-linux-gnu/lib
 printf "\n"
 
@@ -49,13 +49,13 @@ cd postgres && \
     cd ../../bin/pg_config && make && make install
 
 printf "\n"
-printf "ls /usr/aarch64-linux-gnu/bin:"
+printf "ls /usr/aarch64-linux-gnu/bin:\n"
 ls /usr/aarch64-linux-gnu/bin
 printf "\n"
-printf "/usr/aarch64-linux-gnu/include:"
+printf "/usr/aarch64-linux-gnu/include:\n"
 ls /usr/aarch64-linux-gnu/include
 printf "\n"
-printf "/usr/aarch64-linux-gnu/lib"
+printf "/usr/aarch64-linux-gnu/lib:\n"
 ls /usr/aarch64-linux-gnu/lib
 printf "\n"
 
