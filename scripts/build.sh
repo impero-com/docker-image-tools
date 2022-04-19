@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+export PKG_CONFIG_PATH_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-pkg-config
+
 cargo install sccache --version 0.2.15 --no-default-features --target "$1"
 printf "\n"
 cargo install diesel_cli --version 1.4.1 --no-default-features --features postgres --target "$1"
