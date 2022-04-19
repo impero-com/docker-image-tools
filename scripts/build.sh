@@ -16,7 +16,11 @@ printf "\n"
 cargo install cargo-watch --version 8.1.1 --target "$1"
 printf "\n"
 # For doing live reload of documentation
-cargo install penguin-app --version 0.2.2 --target "$1"
+git clone https://github.com/philipahlberg/penguin --depth 1 && \
+    cd penguin && \
+    cargo install --path app --features vendored-openssl --target "$1" && \
+    cd .. && \
+    rm -rf ./penguin
 printf "\n"
 
 echo "Copying files to /export/$1"
