@@ -13,6 +13,9 @@ export PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu
 
 echo "\n"
 ls /usr/aarch64-linux-gnu
+ls /usr/aarch64-linux-gnu/bin
+ls /usr/aarch64-linux-gnu/include
+ls /usr/aarch64-linux-gnu/lib
 echo "\n"
 
 # Build libssl
@@ -24,6 +27,9 @@ cd .. && rm -rf openssl
 
 echo "\n"
 ls /usr/aarch64-linux-gnu
+ls /usr/aarch64-linux-gnu/bin
+ls /usr/aarch64-linux-gnu/include
+ls /usr/aarch64-linux-gnu/lib
 echo "\n"
 
 # Build libpq
@@ -36,6 +42,9 @@ cd postgres && \
 
 echo "\n"
 ls /usr/aarch64-linux-gnu
+ls /usr/aarch64-linux-gnu/bin
+ls /usr/aarch64-linux-gnu/include
+ls /usr/aarch64-linux-gnu/lib
 echo "\n"
 
 cd .. && rm -rf postgres
