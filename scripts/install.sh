@@ -26,7 +26,7 @@ printf "\n"
 git clone https://github.com/openssl/openssl.git --depth 1 --branch OpenSSL_1_1_1m
 cd openssl && \
     ./Configure linux-aarch64 --cross-compile-prefix=aarch64-linux-gnu- --prefix=/usr/aarch64-linux-gnu && \
-    make
+    make && make install
 cd .. && rm -rf openssl
 
 printf "\n"
