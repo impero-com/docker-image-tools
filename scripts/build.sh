@@ -9,7 +9,7 @@ cargo install diesel_cli --version 1.4.1 --no-default-features --features postgr
 printf "\n"
 cargo install diesel_cli_ext --version 0.3.6 --target "$1"
 printf "\n"
-cargo install cargo-audit --version 0.15.0 --features vendored-openssl --target "$1"
+cargo install cargo-audit --version 0.15.0 --target "$1"
 printf "\n"
 cargo install cargo-watch --version 8.1.1 --target "$1"
 printf "\n"
