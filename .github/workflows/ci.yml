@@ -98,10 +98,27 @@ jobs:
         uses: actions/download-artifact@v2
 
       - name: Check downloaded binaries (x86_64)
-        run: ls -lh x86_64/
+        run: |
+          ls -lh x86_64/
+          readelf -h x86_64/sccache
+          readelf -h x86_64/diesel
+          readelf -h x86_64/cargo-audit
+          readelf -h x86_64/cargo-watch
+          readelf -h x86_64/penguin
+          ./x86_64/sccache --help
+          ./x86_64/diesel --help
+          ./x86_64/cargo-audit --help
+          ./x86_64/cargo-watch --help
+          ./x86_64/penguin --help
 
       - name: Check downloaded binaries (aarch64)
-        run: ls -lh aarch64/
+        run: |
+          ls -lh aarch64/
+          readelf -h x86_64/sccache
+          readelf -h x86_64/diesel
+          readelf -h x86_64/cargo-audit
+          readelf -h x86_64/cargo-watch
+          readelf -h x86_64/penguin
 
       - name: Zip binaries
         run: zip -r x86_64.zip x86_64 && zip -r aarch64.zip aarch64
