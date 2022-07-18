@@ -57,12 +57,12 @@ jobs:
       - name: Check binaries
         run: |
           ls -lh /tmp/aarch64-unknown-linux-gnu
-          readelf -h /tmp/aarch64-unknown-linux-gnu/sccache
-          readelf -h /tmp/aarch64-unknown-linux-gnu/diesel
-          readelf -h /tmp/aarch64-unknown-linux-gnu/diesel_ext
-          readelf -h /tmp/aarch64-unknown-linux-gnu/cargo-audit
-          readelf -h /tmp/aarch64-unknown-linux-gnu/cargo-watch
-          readelf -h /tmp/aarch64-unknown-linux-gnu/penguin
+          file /tmp/aarch64-unknown-linux-gnu/sccache
+          file /tmp/aarch64-unknown-linux-gnu/diesel
+          file /tmp/aarch64-unknown-linux-gnu/diesel_ext
+          file /tmp/aarch64-unknown-linux-gnu/cargo-audit
+          file /tmp/aarch64-unknown-linux-gnu/cargo-watch
+          file /tmp/aarch64-unknown-linux-gnu/penguin
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -95,12 +95,12 @@ jobs:
       - name: Check binaries
         run: |
           ls -lh /tmp/x86_64-unknown-linux-gnu
-          readelf -h /tmp/x86_64-unknown-linux-gnu/sccache
-          readelf -h /tmp/x86_64-unknown-linux-gnu/diesel
-          readelf -h /tmp/x86_64-unknown-linux-gnu/diesel_ext
-          readelf -h /tmp/x86_64-unknown-linux-gnu/cargo-audit
-          readelf -h /tmp/x86_64-unknown-linux-gnu/cargo-watch
-          readelf -h /tmp/x86_64-unknown-linux-gnu/penguin
+          file /tmp/x86_64-unknown-linux-gnu/sccache
+          file /tmp/x86_64-unknown-linux-gnu/diesel
+          file /tmp/x86_64-unknown-linux-gnu/diesel_ext
+          file /tmp/x86_64-unknown-linux-gnu/cargo-audit
+          file /tmp/x86_64-unknown-linux-gnu/cargo-watch
+          file /tmp/x86_64-unknown-linux-gnu/penguin
           /tmp/x86_64-unknown-linux-gnu/sccache --help
           /tmp/x86_64-unknown-linux-gnu/diesel --help
           /tmp/x86_64-unknown-linux-gnu/diesel_ext --help
