@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ARG TOOLCHAIN=nightly
+ARG TOOLCHAIN=stable
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
