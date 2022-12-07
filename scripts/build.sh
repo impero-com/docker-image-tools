@@ -17,8 +17,7 @@ printf "\n"
 cargo install penguin-app --version 0.2.2 --target "$1"
 printf "\n"
 # For linting javascript/typescript files
-# 06b8238 is v12.0.0
-cargo install rome_cli --git https://github.com/rome/tools.git --rev 06b8238 --target "$1" 
+cargo install rome_cli --git https://github.com/rome/tools.git --tag cli/v11.0.0 --target "$1" 
 printf "\n"
 
 echo "Copying files to /export/$1"
