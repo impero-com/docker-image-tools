@@ -16,6 +16,10 @@ printf "\n"
 # For doing live reload of documentation
 cargo install penguin-app --version 0.2.2 --target "$1"
 printf "\n"
+# For linting javascript/typescript files
+# 06b8238 is v12.0.0
+cargo install rome_cli --git https://github.com/rome/tools.git --rev 06b8238 --target "$1" 
+printf "\n"
 
 echo "Copying files to /export/$1"
 mkdir -p /export/$1
@@ -25,3 +29,4 @@ cp $CARGO_HOME/bin/diesel_ext /export/$1/
 cp $CARGO_HOME/bin/cargo-audit /export/$1/
 cp $CARGO_HOME/bin/cargo-watch /export/$1/
 cp $CARGO_HOME/bin/penguin /export/$1/
+cp $CARGO_HOME/bin/rome /export/$1/

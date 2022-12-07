@@ -22,9 +22,8 @@ ENV RUSTUP_HOME=/usr/local/rustup \
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- \
     --profile minimal --default-toolchain "$TOOLCHAIN" -y && \
-    rustup target add aarch64-unknown-linux-gnu
-
-RUN rustup --version && \
+    rustup target add aarch64-unknown-linux-gnu && \ 
+    rustup --version && \
     cargo --version && \
     rustc --version
 
