@@ -1,27 +1,54 @@
 #!/bin/bash
 set -eu
 
-export PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu
+build-image() {
+    docker build --rm -f Dockerfile -t imperocom/image-tools .
+}
 
-cargo install sccache --version 0.2.15 --no-default-features --target "$1"
-printf "\n"
-cargo install diesel_cli --version 1.4.1 --no-default-features --features postgres --target "$1"
-printf "\n"
-cargo install diesel_cli_ext --version 0.3.6 --target "$1"
-printf "\n"
-cargo install cargo-audit --version 0.15.0 --target "$1"
-printf "\n"
-cargo install cargo-watch --version 8.1.1 --target "$1"
-printf "\n"
-# For doing live reload of documentation
-cargo install penguin-app --version 0.2.2 --target "$1"
-printf "\n"
+build-arch() {
+    local ARCH="$1"
+    local SHORT_ARCH="$2"
+    local INSTANCE=$(uuidgen)
 
-echo "Copying files to /export/$1"
-mkdir -p /export/$1
-cp $CARGO_HOME/bin/sccache /export/$1/
-cp $CARGO_HOME/bin/diesel /export/$1/
-cp $CARGO_HOME/bin/diesel_ext /export/$1/
-cp $CARGO_HOME/bin/cargo-audit /export/$1/
-cp $CARGO_HOME/bin/cargo-watch /export/$1/
-cp $CARGO_HOME/bin/penguin /export/$1/
+    if [ $( docker ps -a | grep "builder-$INSTANCE" | wc -l ) -gt 0 ]; then
+        echo "builder-$INSTANCE already exists"
+        return 1
+    fi
+
+    docker run -i --name "builder-$INSTANCE" imperocom/image-tools /scripts/build-arch.sh "$ARCH"
+
+    if [ $( docker ps -a | grep "builder-$INSTANCE" | wc -l ) -le 0 ]; then
+        echo "builder-$INSTANCE does not exist"
+        return 1
+    fi
+
+    mkdir "/tmp/builder-$INSTANCE"
+
+    docker cp "builder-$INSTANCE:/export/$ARCH" "/tmp/builder-$INSTANCE/$SHORT_ARCH"
+
+    docker rm -f "builder-$INSTANCE"
+
+    cd "/tmp/builder-$INSTANCE"
+    for f in sccache diesel diesel_ext cargo-audit cargo-watch penguin
+    do
+        echo "Checking $f"
+        test -f "$SHORT_ARCH/$f"
+        if [ $(uname -m) = "$SHORT_ARCH" ]
+        then
+            "$SHORT_ARCH/$f" --help
+        else
+            test -x "$SHORT_ARCH/$f"
+        fi
+    done
+    zip -r "$SHORT_ARCH.zip" "$SHORT_ARCH"
+    cd -
+
+    cp "/tmp/builder-$INSTANCE/$SHORT_ARCH.zip" .
+
+    rm -rf "/tmp/builder-$INSTANCE"
+}
+
+build-image
+build-arch x86_64-unknown-linux-gnu x86_64
+build-arch aarch64-unknown-linux-gnu aarch64
+
