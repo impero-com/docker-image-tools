@@ -4,8 +4,7 @@ set -eu
 apt-get install -qq \
     crossbuild-essential-arm64 \
     libc6-arm64-cross \
-    libc6-dev-arm64-cross \
-    pkg-config-aarch64-linux-gnu
+    libc6-dev-arm64-cross
 
 # Build libssl
 git clone https://github.com/openssl/openssl.git --depth 1 --branch OpenSSL_1_1_1m

@@ -7,7 +7,7 @@ on:
 jobs:
   delete-image-artifact:
     name: Delete unused artifact
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Delete image artifact
         uses: actions/github-script@v6

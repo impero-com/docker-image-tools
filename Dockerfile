@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 ARG TOOLCHAIN=stable
 ENV DEBIAN_FRONTEND=noninteractive
@@ -33,4 +33,4 @@ COPY .cargo /.cargo
 RUN cp /.cargo/* $CARGO_HOME/ && rm -rf /.cargo
 
 COPY scripts/ scripts/
-RUN scripts/install.sh
+RUN scripts/image/install.sh
