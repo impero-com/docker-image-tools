@@ -7,11 +7,12 @@ apt-get install -qq \
     libc6-dev-arm64-cross
 
 # Build libssl
-git clone https://github.com/openssl/openssl.git --depth 1 --branch OpenSSL_1_1_1m
-cd openssl && \
+OPENSSL_TAG=openssl-3.0.2
+git clone https://github.com/openssl/openssl.git --depth 1 --tag "$OPENSSL_TAG"
+cd "$OPENSSL_TAG" && \
     ./Configure linux-aarch64 --cross-compile-prefix=aarch64-linux-gnu- --prefix=/usr/aarch64-linux-gnu && \
     make && make install
-cd .. && rm -rf openssl
+cd .. && rm -rf "$OPENSSL_TAG"
 
 # Build libpq
 git clone https://github.com/postgres/postgres.git --depth 1 --branch REL_14_2
