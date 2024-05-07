@@ -29,7 +29,7 @@ build-arch() {
     docker rm -f "builder-$INSTANCE"
 
     cd "/tmp/builder-$INSTANCE"
-    for f in sccache diesel diesel_ext cargo-audit cargo-watch penguin
+    for f in sccache diesel diesel_ext cargo-audit cargo-watch cargo-dylint dylint-link penguin
     do
         echo "Checking $f"
         test -f "$SHORT_ARCH/$f"

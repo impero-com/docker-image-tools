@@ -13,6 +13,10 @@ cargo install cargo-audit --version 0.20.0 --target "$1"
 printf "\n"
 cargo install cargo-watch --version 8.5.2 --target "$1"
 printf "\n"
+cargo install cargo-dylint --version 3.1.0 --target "$1"
+printf "\n"
+cargo install dylint-link --version 3.1.0 --target "$1"
+printf "\n"
 # For doing live reload of documentation
 cargo install penguin-app --version 0.2.6 --target "$1"
 printf "\n"
@@ -24,4 +28,6 @@ cp $CARGO_HOME/bin/diesel /export/$1/
 cp $CARGO_HOME/bin/diesel_ext /export/$1/
 cp $CARGO_HOME/bin/cargo-audit /export/$1/
 cp $CARGO_HOME/bin/cargo-watch /export/$1/
+cp $CARGO_HOME/bin/cargo-dylint /export/$1/
+cp $CARGO_HOME/bin/dylint-link /export/$1/
 cp $CARGO_HOME/bin/penguin /export/$1/
