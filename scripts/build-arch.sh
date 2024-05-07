@@ -1,7 +1,18 @@
 #!/bin/bash
 set -eu
 
-export PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu
+export PKG_CONFIG_SYSROOT_DIR="/usr/${2}-linux-gnu"
+export RUSTFLAGS="-C linker=${2}-linux-gnu-gcc"
+export HOST_CC=gcc
+
+# We have to point directly to the right cross compilation tools, becuase cargo
+# isnt smart enough to choose them automatically
+export CC_x86_64_unknown_linux_gnu=/usr/bin/x86_64-linux-gnu-gcc
+export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/x86_64-linux-gnu-gcc
+export CC_aarch64_unknown_linux_gnu=/usr/bin/aarch64-linux-gnu-gcc
+export CARGO_TARGET_AARCH_64_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/aarch64-linux-gnu-gcc
+
+echo "building '$1'"
 
 cargo install sccache --version 0.8.0 --no-default-features --target "$1"
 printf "\n"

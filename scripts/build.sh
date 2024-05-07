@@ -15,7 +15,7 @@ build-arch() {
         return 1
     fi
 
-    docker run -i --name "builder-$INSTANCE" imperocom/image-tools /scripts/build-arch.sh "$ARCH"
+    docker run -i --name "builder-$INSTANCE" imperocom/image-tools /scripts/build-arch.sh "$ARCH" "$SHORT_ARCH"
 
     if [ $( docker ps -a | grep "builder-$INSTANCE" | wc -l ) -le 0 ]; then
         echo "builder-$INSTANCE does not exist"
