@@ -15,7 +15,7 @@ build-arch() {
         return 1
     fi
 
-    docker run -i --name "builder-$INSTANCE" imperocom/image-tools /scripts/build-arch.sh "$ARCH"
+    docker run -i --name "builder-$INSTANCE" imperocom/image-tools /scripts/build-arch.sh "$ARCH" "$SHORT_ARCH"
 
     if [ $( docker ps -a | grep "builder-$INSTANCE" | wc -l ) -le 0 ]; then
         echo "builder-$INSTANCE does not exist"
@@ -29,7 +29,7 @@ build-arch() {
     docker rm -f "builder-$INSTANCE"
 
     cd "/tmp/builder-$INSTANCE"
-    for f in sccache diesel diesel_ext cargo-audit cargo-watch penguin
+    for f in sccache diesel diesel_ext cargo-audit cargo-watch cargo-dylint dylint-link penguin
     do
         echo "Checking $f"
         test -f "$SHORT_ARCH/$f"
