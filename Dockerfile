@@ -33,5 +33,5 @@ RUN rustup --version && \
 COPY .cargo /.cargo
 RUN cp /.cargo/* $CARGO_HOME/ && rm -rf /.cargo
 
-COPY scripts/ scripts/
+COPY scripts/image/ scripts/image/
 RUN scripts/image/install.sh
