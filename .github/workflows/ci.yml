@@ -50,7 +50,7 @@ jobs:
         run: |
           docker load --input /tmp/image.tar
           docker run -i --name builder gcc-cc \
-            /scripts/build-arch.sh aarch64-unknown-linux-gnu aarch64
+            /scripts/image/build-arch.sh aarch64-unknown-linux-gnu aarch64
           docker cp builder:/export/aarch64-unknown-linux-gnu /tmp/aarch64-unknown-linux-gnu
           docker rm -f builder
 
@@ -90,7 +90,7 @@ jobs:
         run: |
           docker load --input /tmp/image.tar
           docker run -i --name builder gcc-cc \
-            /scripts/build-arch.sh x86_64-unknown-linux-gnu x86_64
+            /scripts/image/build-arch.sh x86_64-unknown-linux-gnu x86_64
           docker cp builder:/export/x86_64-unknown-linux-gnu /tmp/x86_64-unknown-linux-gnu
           docker rm -f builder
 

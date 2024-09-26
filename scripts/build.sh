@@ -15,7 +15,7 @@ build-arch() {
         return 1
     fi
 
-    docker run -i --name "builder-$INSTANCE" imperocom/image-tools /scripts/build-arch.sh "$ARCH" "$SHORT_ARCH"
+    docker run -i --name "builder-$INSTANCE" imperocom/image-tools /scripts/image/build-arch.sh "$ARCH" "$SHORT_ARCH"
 
     if [ $( docker ps -a | grep "builder-$INSTANCE" | wc -l ) -le 0 ]; then
         echo "builder-$INSTANCE does not exist"
@@ -35,7 +35,8 @@ build-arch() {
         test -f "$SHORT_ARCH/$f"
         if [ $(uname -m) = "$SHORT_ARCH" ]
         then
-            "$SHORT_ARCH/$f" --help
+            # RUSTUP_TOOLCHAIN for dylint-link
+            RUSTUP_TOOLCHAIN="stable" "$SHORT_ARCH/$f" --help
         else
             test -x "$SHORT_ARCH/$f"
         fi
