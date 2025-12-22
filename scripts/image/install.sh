@@ -28,11 +28,11 @@ apt-get install -qq \
 
 # Build libssl
 OPENSSL_TAG=openssl-3.0.2
-git clone https://github.com/openssl/openssl.git --depth 1 --tag "$OPENSSL_TAG"
-cd "$OPENSSL_TAG" && \
+git clone https://github.com/openssl/openssl.git --depth 1 --branch "$OPENSSL_TAG"
+cd openssl && \
     ./Configure "linux-${CROSS_ARCH_LONG}" "--cross-compile-prefix=${CROSS_ARCH_LONG}-linux-gnu-" "--prefix=/usr/${CROSS_ARCH_LONG}-linux-gnu" && \
     make && make install
-cd .. && rm -rf "$OPENSSL_TAG"
+cd .. && rm -rf openssl
 
 # Build libpq
 git clone https://github.com/postgres/postgres.git --depth 1 --branch REL_14_2
