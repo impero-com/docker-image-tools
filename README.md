@@ -9,6 +9,12 @@ When changes are made and pushed, the Docker image will be built, and the binari
 ### Release
 If a commit is tagged, the workflow will run, and a new release will be created. The binaries will be uploaded as assets in the release. The release will have the same name as the tag.
 
+#### Steps
+1. Check you're in the desired branch/commit (top of master usually)
+2. `git tag X.Y`
+3. `git push --tags`
+4. CI runs and creates a release
+
 ### Development
 
 * On `x86_64`: run `./scripts/build.sh`
