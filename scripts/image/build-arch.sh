@@ -14,7 +14,8 @@ export CARGO_TARGET_AARCH_64_UNKNOWN_LINUX_GNU_LINKER=/usr/bin/aarch64-linux-gnu
 
 echo "building '$1'"
 
-cargo install sccache --version 0.8.0 --no-default-features --target "$1"
+# Build sccache with azure feature to use blob storage as a shared, content-addressed compilation cache.
+cargo install sccache --version 0.17.0 --no-default-features --features azure --target "$1"
 printf "\n"
 cargo install diesel_cli --version 2.2.4 --no-default-features --features postgres --target "$1"
 printf "\n"
