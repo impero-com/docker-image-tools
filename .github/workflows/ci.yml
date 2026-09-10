@@ -62,8 +62,6 @@ jobs:
           file /tmp/aarch64-unknown-linux-gnu/diesel_ext
           file /tmp/aarch64-unknown-linux-gnu/cargo-audit
           file /tmp/aarch64-unknown-linux-gnu/cargo-watch
-          file /tmp/aarch64-unknown-linux-gnu/cargo-dylint
-          file /tmp/aarch64-unknown-linux-gnu/dylint-link
           file /tmp/aarch64-unknown-linux-gnu/penguin
 
       - name: Upload artifact
@@ -102,16 +100,12 @@ jobs:
           file /tmp/x86_64-unknown-linux-gnu/diesel_ext
           file /tmp/x86_64-unknown-linux-gnu/cargo-audit
           file /tmp/x86_64-unknown-linux-gnu/cargo-watch
-          file /tmp/x86_64-unknown-linux-gnu/cargo-dylint
-          file /tmp/x86_64-unknown-linux-gnu/dylint-link
           file /tmp/x86_64-unknown-linux-gnu/penguin
           /tmp/x86_64-unknown-linux-gnu/sccache --help
           /tmp/x86_64-unknown-linux-gnu/diesel --help
           /tmp/x86_64-unknown-linux-gnu/diesel_ext --help
           /tmp/x86_64-unknown-linux-gnu/cargo-audit --help
           /tmp/x86_64-unknown-linux-gnu/cargo-watch --help
-          /tmp/x86_64-unknown-linux-gnu/cargo-dylint --help
-          RUSTUP_TOOLCHAIN="stable" /tmp/x86_64-unknown-linux-gnu/dylint-link --help
           /tmp/x86_64-unknown-linux-gnu/penguin --help
 
       - name: Upload artifact
