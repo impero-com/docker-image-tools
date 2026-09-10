@@ -29,14 +29,13 @@ build-arch() {
     docker rm -f "builder-$INSTANCE"
 
     cd "/tmp/builder-$INSTANCE"
-    for f in sccache diesel diesel_ext cargo-audit cargo-watch cargo-dylint dylint-link penguin
+    for f in sccache diesel diesel_ext cargo-audit cargo-watch penguin
     do
         echo "Checking $f"
         test -f "$SHORT_ARCH/$f"
         if [ $(uname -m) = "$SHORT_ARCH" ]
         then
-            # RUSTUP_TOOLCHAIN for dylint-link
-            RUSTUP_TOOLCHAIN="stable" "$SHORT_ARCH/$f" --help
+            "$SHORT_ARCH/$f" --help
         else
             test -x "$SHORT_ARCH/$f"
         fi
