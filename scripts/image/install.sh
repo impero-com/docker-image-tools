@@ -27,21 +27,54 @@ apt-get install -qq \
     "libc6-dev-${CROSS_ARCH_SHORT}-cross"
 
 # Build libssl
-OPENSSL_TAG=openssl-3.0.2
-git clone https://github.com/openssl/openssl.git --depth 1 --branch "$OPENSSL_TAG"
-cd openssl && \
-    ./Configure "linux-${CROSS_ARCH_LONG}" "--cross-compile-prefix=${CROSS_ARCH_LONG}-linux-gnu-" "--prefix=/usr/${CROSS_ARCH_LONG}-linux-gnu" && \
-    make && make install
-cd .. && rm -rf openssl
+build_libssl() {
+    local OPENSSL_TAG=openssl-3.0.2
+
+    git clone https://github.com/openssl/openssl.git --depth 1 --branch "$OPENSSL_TAG"
+
+    cd openssl
+
+    ./Configure "linux-${CROSS_ARCH_LONG}" "--cross-compile-prefix=${CROSS_ARCH_LONG}-linux-gnu-" "--prefix=/usr/${CROSS_ARCH_LONG}-linux-gnu"
+    make
+    make install
+
+    cd ..
+
+    test -d openssl
+    rm -rf openssl
+}
+
+build_libssl
 
 # Build libpq
-git clone https://github.com/postgres/postgres.git --depth 1 --branch REL_14_2
-cd postgres && \
-    CC="${CROSS_ARCH_LONG}-linux-gnu-gcc" CXX="${CROSS_ARCH_LONG}-linux-gnu-g++" AR="${CROSS_ARCH_LONG}-linux-gnu-ar" RANLIB="${CROSS_ARCH_LONG}-linux-gnu-ranlib"; \
-    ./configure "--host=${CROSS_ARCH_LONG}-linux-gnu" "--prefix=/usr/${CROSS_ARCH_LONG}-linux-gnu" --without-zlib --without-readline && \
-    cd src/interfaces/libpq && make install && \
-    cd ../../bin/pg_config && make && make install
+build_libpq() {
+    local POSTGRES_TAG=REL_18_6
 
-cd .. && rm -rf postgres
+    git clone https://github.com/postgres/postgres.git --depth 1 --branch "$POSTGRES_TAG"
+
+    cd postgres
+
+    CC="${CROSS_ARCH_LONG}-linux-gnu-gcc" CXX="${CROSS_ARCH_LONG}-linux-gnu-g++" AR="${CROSS_ARCH_LONG}-linux-gnu-ar" RANLIB="${CROSS_ARCH_LONG}-linux-gnu-ranlib" ./configure "--host=${CROSS_ARCH_LONG}-linux-gnu" "--prefix=/usr/${CROSS_ARCH_LONG}-linux-gnu" --without-zlib --without-readline
+
+    cd src/interfaces/libpq
+
+    make install
+
+    cd -
+
+    cd src/bin/pg_config
+
+    make
+    make install
+
+    cd -
+
+    cd ..
+
+    test -d postgres
+    rm -rf postgres
+}
+
+build_libpq
 
 rm -rf /tmp/*

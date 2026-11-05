@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:26.04
 
 ARG TOOLCHAIN=stable
 ENV DEBIAN_FRONTEND=noninteractive
@@ -13,6 +13,7 @@ RUN apt-get update && \
     flex \
     pkg-config \
     libssl-dev \
+    libicu-dev \
     libpq-dev
 
 # Set up Rust
